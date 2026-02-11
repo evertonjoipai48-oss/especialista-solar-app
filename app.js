@@ -1,154 +1,125 @@
 
-let db = JSON.parse(localStorage.getItem("solarClientes") || "{}");
-let clienteAtual = null;
+
+// ======== CONFIGURE AQUI COM SEU FIREBASE ========
+const firebaseConfig = {
+  apiKey: "COLOQUE_SUA_APIKEY",
+  authDomain: "SEU_DOMINIO.firebaseapp.com",
+  projectId: "SEU_PROJECT_ID",
+};
+// ================================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let usuario = null;
+let dados = {};
 let chart = null;
 
-function salvarDB(){
-  localStorage.setItem("solarClientes", JSON.stringify(db));
-}
+// login
+document.getElementById("btnLogin").onclick = async ()=>{
+  const email = emailInput.value;
+  const senha = senhaInput.value;
 
-function criarCliente(){
-  let nome = document.getElementById("clienteNome").value;
-  if(!nome) return;
+  try{
+    await signInWithEmailAndPassword(auth,email,senha);
+  }catch{
+    await createUserWithEmailAndPassword(auth,email,senha);
+  }
+};
 
-  if(!db[nome]) db[nome]=[];
-  clienteAtual=nome;
+document.getElementById("logout").onclick = ()=>signOut(auth);
 
+const emailInput = document.getElementById("email");
+const senhaInput = document.getElementById("senha");
+
+onAuthStateChanged(auth, async (user)=>{
+  if(user){
+    usuario = user.uid;
+    loginBox.style.display="none";
+    appBox.style.display="block";
+    await carregar();
+  }else{
+    loginBox.style.display="block";
+    appBox.style.display="none";
+  }
+});
+
+async function carregar(){
+  const ref = doc(db,"usuarios",usuario);
+  const snap = await getDoc(ref);
+  dados = snap.exists() ? snap.data() : {};
   atualizarClientes();
-  atualizarTela();
-  salvarDB();
 }
+
+async function salvarNuvem(){
+  await setDoc(doc(db,"usuarios",usuario),dados);
+}
+
+// clientes
+addCliente.onclick = ()=>{
+  const nome = clienteNome.value;
+  if(!dados[nome]) dados[nome]=[];
+  atualizarClientes();
+  salvarNuvem();
+};
 
 function atualizarClientes(){
-  let sel=document.getElementById("clientesSelect");
-  sel.innerHTML="";
-  Object.keys(db).forEach(c=>{
-    let o=document.createElement("option");
+  clientesSelect.innerHTML="";
+  Object.keys(dados).forEach(c=>{
+    const o=document.createElement("option");
     o.text=c;
-    sel.appendChild(o);
+    clientesSelect.appendChild(o);
   });
-  sel.value=clienteAtual;
 }
 
-function trocarCliente(){
-  clienteAtual=document.getElementById("clientesSelect").value;
-  atualizarTela();
-}
+salvar.onclick = ()=>{
+  const c = clientesSelect.value;
+  const mes = mesInput.value;
+  const prod = Number(producao.value);
+  const tarifa = Number(tarifaInput.value);
 
-/* BACKUP */
-function exportarBackup(){
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
-  const a = document.createElement("a");
-  a.href = dataStr;
-  a.download = "backup_especialista_solar.json";
-  a.click();
-}
+  const receita = (prod*tarifa).toFixed(2);
 
-function importarBackup(event){
-  const file = event.target.files[0];
-  if(!file) return;
+  dados[c].push({mes,prod,receita});
+  salvarNuvem();
+  atualizarPainel();
+};
 
-  const reader = new FileReader();
-  reader.onload = function(e){
-    db = JSON.parse(e.target.result);
-    salvarDB();
-    atualizarClientes();
-    atualizarTela();
-    alert("Backup restaurado com sucesso!");
-  };
-  reader.readAsText(file);
-}
+const mesInput = document.getElementById("mes");
+const producao = document.getElementById("producao");
+const tarifaInput = document.getElementById("tarifa");
 
-/* PDF leitura */
-async function lerPDF(){
-  const file=document.getElementById("pdfInput").files[0];
-  if(!file) return;
+function atualizarPainel(){
 
-  const reader=new FileReader();
+  const c = clientesSelect.value;
+  const lista = dados[c] || [];
 
-  reader.onload=async function(){
-    const typedarray=new Uint8Array(this.result);
-    const pdf=await pdfjsLib.getDocument(typedarray).promise;
+  let total=0;
+  let labels=[], valores=[];
 
-    let texto="";
+  tabela.innerHTML="<tr><th>Mês</th><th>Receita</th></tr>";
 
-    for(let i=1;i<=pdf.numPages;i++){
-      let page=await pdf.getPage(i);
-      let content=await page.getTextContent();
-      texto+=content.items.map(i=>i.str).join(" ");
-    }
-
-    let nums=texto.match(/\d{3,5}[\.,]?\d*/g);
-    if(nums){
-      document.getElementById("consumo").value=nums[0];
-      document.getElementById("producao").value=nums[1];
-    }
-  };
-
-  reader.readAsArrayBuffer(file);
-}
-
-function salvarMes(){
-  if(!clienteAtual) return alert("Selecione cliente");
-
-  let mes=document.getElementById("mes").value;
-  let p=Number(document.getElementById("producao").value);
-  let c=Number(document.getElementById("consumo").value);
-  let t=Number(document.getElementById("tarifa").value);
-
-  let eco=(p*t).toFixed(2);
-
-  db[clienteAtual].push({mes,p,c,eco});
-  salvarDB();
-  atualizarTela();
-}
-
-function atualizarTela(){
-
-  if(!clienteAtual) return;
-
-  let dados=db[clienteAtual];
-
-  let tabela=document.getElementById("tabela");
-  tabela.innerHTML="<tr><th>Mês</th><th>Prod</th><th>Cons</th><th>Eco</th></tr>";
-
-  let labels=[],prod=[],cons=[],total=0;
-
-  dados.forEach(d=>{
-    tabela.innerHTML+=`<tr><td>${d.mes}</td><td>${d.p}</td><td>${d.c}</td><td>${d.eco}</td></tr>`;
-    labels.push(d.mes);
-    prod.push(d.p);
-    cons.push(d.c);
-    total+=Number(d.eco);
+  lista.forEach(l=>{
+    tabela.innerHTML+=`<tr><td>${l.mes}</td><td>${l.receita}</td></tr>`;
+    total+=Number(l.receita);
+    labels.push(l.mes);
+    valores.push(l.receita);
   });
 
-  document.getElementById("resumo").innerText="Economia acumulada: R$ "+total.toFixed(2);
+  totalReceita.innerText="Receita total: R$ "+total.toFixed(2);
 
   if(chart) chart.destroy();
 
-  chart=new Chart(document.getElementById("grafico"),{
-    type:'bar',
-    data:{
-      labels:labels,
-      datasets:[
-        {label:'Produção',data:prod},
-        {label:'Consumo',data:cons}
-      ]
-    }
+  chart=new Chart(graficoFinanceiro,{
+    type:'line',
+    data:{labels,datasets:[{label:'Receita',data:valores}]}
   });
 }
 
-function exportarExcel(){
-  let dados=db[clienteAtual];
-  let ws=XLSX.utils.json_to_sheet(dados);
-  let wb=XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb,ws,"Relatorio");
-  XLSX.writeFile(wb,"relatorio_"+clienteAtual+".xlsx");
-}
+clientesSelect.onchange = atualizarPainel;
 
-function enviarWhats(){
-  let msg=document.getElementById("resumo").innerText+" Cliente: "+clienteAtual;
-  window.open("https://wa.me/5566992545753?text="+encodeURIComponent(msg));
-}
-
-atualizarClientes();
