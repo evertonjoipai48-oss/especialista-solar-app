@@ -3,40 +3,43 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <title>Especialista Solar PRO 4.0</title>
+  <title>Especialista Solar PRO 5.0</title>
 
   <link rel="stylesheet" href="style.css"/>
 
-  <!-- libs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-
 </head>
 
 <body>
 
 <header>
-  <h1>☀ Especialista Solar PRO 4.0</h1>
-  <p>CRM Solar • PDF Profissional • Excel Automático</p>
+  <h1>☀ Especialista Solar PRO 5.0</h1>
+  <p>CRM Solar • PDF • Excel • Backup em Nuvem</p>
 </header>
 
 <section class="card">
-  <h2>Cliente</h2>
+  <h2>👤 Cliente</h2>
   <input id="clienteNome" placeholder="Nome do cliente">
   <button onclick="criarCliente()">Criar / Selecionar</button>
   <select id="clientesSelect" onchange="trocarCliente()"></select>
 </section>
 
 <section class="card">
-  <h2>Fatura (PDF)</h2>
+  <h2>☁ Backup em Nuvem</h2>
+  <button onclick="exportarBackup()">⬇ Baixar Backup</button>
+  <input type="file" id="backupInput" accept=".json" onchange="importarBackup(event)">
+</section>
+
+<section class="card">
+  <h2>📄 Fatura PDF</h2>
   <input type="file" id="pdfInput" accept="application/pdf">
   <button onclick="lerPDF()">Ler automaticamente</button>
 </section>
 
 <section class="card">
-  <h2>Dados do mês</h2>
+  <h2>⚡ Dados do mês</h2>
   <input id="mes" placeholder="Ex: Jan/26">
   <input id="producao" placeholder="Produção kWh">
   <input id="consumo" placeholder="Consumo kWh">
@@ -49,10 +52,9 @@
 </section>
 
 <section class="card">
-  <h2>Relatórios</h2>
   <p id="resumo"></p>
-  <button onclick="gerarPDF()">PDF Profissional</button>
-  <button onclick="exportarExcel()">Exportar Excel</button>
+  <button onclick="window.print()">PDF Profissional</button>
+  <button onclick="exportarExcel()">Excel</button>
   <button onclick="enviarWhats()">WhatsApp</button>
 </section>
 

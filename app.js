@@ -12,7 +12,7 @@ function criarCliente(){
   if(!nome) return;
 
   if(!db[nome]) db[nome]=[];
-  clienteAtual = nome;
+  clienteAtual=nome;
 
   atualizarClientes();
   atualizarTela();
@@ -20,15 +20,13 @@ function criarCliente(){
 }
 
 function atualizarClientes(){
-  let sel = document.getElementById("clientesSelect");
+  let sel=document.getElementById("clientesSelect");
   sel.innerHTML="";
-
   Object.keys(db).forEach(c=>{
     let o=document.createElement("option");
     o.text=c;
     sel.appendChild(o);
   });
-
   sel.value=clienteAtual;
 }
 
@@ -37,6 +35,31 @@ function trocarCliente(){
   atualizarTela();
 }
 
+/* BACKUP */
+function exportarBackup(){
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db));
+  const a = document.createElement("a");
+  a.href = dataStr;
+  a.download = "backup_especialista_solar.json";
+  a.click();
+}
+
+function importarBackup(event){
+  const file = event.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    db = JSON.parse(e.target.result);
+    salvarDB();
+    atualizarClientes();
+    atualizarTela();
+    alert("Backup restaurado com sucesso!");
+  };
+  reader.readAsText(file);
+}
+
+/* PDF leitura */
 async function lerPDF(){
   const file=document.getElementById("pdfInput").files[0];
   if(!file) return;
@@ -115,19 +138,11 @@ function atualizarTela(){
   });
 }
 
-function gerarPDF(){
-  window.print();
-}
-
 function exportarExcel(){
-
   let dados=db[clienteAtual];
-
   let ws=XLSX.utils.json_to_sheet(dados);
   let wb=XLSX.utils.book_new();
-
   XLSX.utils.book_append_sheet(wb,ws,"Relatorio");
-
   XLSX.writeFile(wb,"relatorio_"+clienteAtual+".xlsx");
 }
 
