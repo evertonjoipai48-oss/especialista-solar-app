@@ -1,8 +1,1 @@
-{
-  "name": "Especialista Solar",
-  "short_name": "Solar",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0d47a1"
-}
+{"name": "Especialista Solar PRO", "short_name": "SolarPRO", "display": "standalone", "start_url": "./index.html"}
