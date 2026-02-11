@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Especialista Solar • Relatório Mensal</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="manifest" href="manifest.json"/>
+</head>
+<body>
+
+<header>
+  <h1>☀ Especialista Solar</h1>
+  <p>Relatório Mensal Automático</p>
+</header>
+
+<section class="card">
+  <h2>Dados do mês</h2>
+
+  <label>Produção (kWh)</label>
+  <input id="producao" type="number" value="4183">
+
+  <label>Consumo (kWh)</label>
+  <input id="consumo" type="number" value="669">
+
+  <label>Tarifa (R$)</label>
+  <input id="tarifa" type="number" step="0.01" value="1.12">
+
+  <button onclick="calcular()">Gerar Relatório</button>
+</section>
+
+<section class="card" id="resultado" style="display:none;">
+  <h2>Resumo</h2>
+  <p id="resumo"></p>
+
+  <button onclick="baixarPDF()">Baixar PDF</button>
+  <button onclick="whatsapp()">Enviar WhatsApp</button>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
