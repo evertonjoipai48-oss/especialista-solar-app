@@ -1,26 +1,30 @@
 
 body{
-  font-family: Arial;
+  font-family:Arial;
   background:#eef3f9;
   padding:20px;
 }
+
 header{
   text-align:center;
   color:#0d47a1;
 }
+
 .card{
   background:white;
-  padding:18px;
-  margin:18px auto;
-  max-width:750px;
+  padding:20px;
+  margin:20px auto;
+  max-width:800px;
   border-radius:12px;
   box-shadow:0 4px 14px rgba(0,0,0,.1);
 }
-input, select, button{
+
+input,select,button{
   width:100%;
   padding:10px;
   margin-top:6px;
 }
+
 button{
   background:#ff9800;
   color:white;
@@ -28,12 +32,21 @@ button{
   border-radius:8px;
   font-weight:bold;
 }
+
 table{
   width:100%;
   border-collapse:collapse;
 }
+
 td,th{
   border:1px solid #ddd;
   padding:6px;
   text-align:center;
+}
+
+/* impressão profissional */
+@media print{
+  body{background:white}
+  button, input, select{display:none}
+  header{font-size:20px}
 }
