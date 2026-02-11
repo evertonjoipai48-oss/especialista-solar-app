@@ -12,11 +12,11 @@ header{
   background:white;
   padding:18px;
   margin:18px auto;
-  max-width:700px;
+  max-width:750px;
   border-radius:12px;
   box-shadow:0 4px 14px rgba(0,0,0,.1);
 }
-input, button{
+input, select, button{
   width:100%;
   padding:10px;
   margin-top:6px;
