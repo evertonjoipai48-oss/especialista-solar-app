@@ -1,8 +1,7 @@
 
 body{
   font-family: Arial;
-  background:#eef2f7;
-  margin:0;
+  background:#eef3f9;
   padding:20px;
 }
 header{
@@ -11,21 +10,18 @@ header{
 }
 .card{
   background:white;
-  padding:20px;
-  margin:20px auto;
-  max-width:600px;
-  border-radius:14px;
-  box-shadow:0 5px 18px rgba(0,0,0,.1);
+  padding:18px;
+  margin:18px auto;
+  max-width:700px;
+  border-radius:12px;
+  box-shadow:0 4px 14px rgba(0,0,0,.1);
 }
-input{
+input, button{
   width:100%;
   padding:10px;
-  margin:6px 0;
+  margin-top:6px;
 }
 button{
-  width:100%;
-  padding:10px;
-  margin-top:8px;
   background:#ff9800;
   color:white;
   border:none;

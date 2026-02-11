@@ -3,44 +3,57 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Especialista Solar PRO</title>
+  <title>Especialista Solar PRO 2.0</title>
+
   <link rel="stylesheet" href="style.css"/>
+
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
 <header>
-  <h1>☀ Especialista Solar PRO</h1>
-  <p>Relatório Mensal Automático Inteligente</p>
+  <h1>☀ Especialista Solar PRO 2.0</h1>
+  <p>Leitura automática de fatura + relatórios inteligentes</p>
 </header>
 
 <section class="card">
-  <h2>Novo mês</h2>
-  <input id="mes" placeholder="Ex: Jan/26">
-  <input id="producao" type="number" placeholder="Produção kWh">
-  <input id="consumo" type="number" placeholder="Consumo kWh">
-  <input id="tarifa" type="number" step="0.01" placeholder="Tarifa R$">
+  <h2>📄 Enviar fatura (PDF)</h2>
+  <input type="file" id="pdfInput" accept="application/pdf">
+  <button onclick="lerPDF()">Ler automaticamente</button>
+</section>
+
+<section class="card">
+  <h2>⚡ Dados detectados</h2>
+  <input id="mes" placeholder="Mês (Ex: Jan/26)">
+  <input id="producao" placeholder="Produção (kWh)">
+  <input id="consumo" placeholder="Consumo (kWh)">
+  <input id="tarifa" placeholder="Tarifa (R$)" value="1.12">
   <button onclick="salvar()">Salvar mês</button>
 </section>
 
 <section class="card">
-  <h2>Resumo</h2>
+  <h2>📊 Gráfico</h2>
+  <canvas id="grafico"></canvas>
+</section>
+
+<section class="card">
+  <h2>💰 Resumo</h2>
   <p id="resumo"></p>
   <button onclick="window.print()">Gerar PDF</button>
   <button onclick="enviarWhats()">Enviar WhatsApp</button>
 </section>
 
 <section class="card">
-  <h2>Gráfico Produção x Consumo</h2>
-  <canvas id="grafico"></canvas>
-</section>
-
-<section class="card">
-  <h2>Histórico</h2>
+  <h2>📅 Histórico</h2>
   <table id="tabela"></table>
 </section>
 
 <script src="app.js"></script>
+
 </body>
 </html>
