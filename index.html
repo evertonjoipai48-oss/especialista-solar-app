@@ -3,25 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Especialista Solar PRO 12</title>
-
+<title>Especialista Solar PRO 12.2</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
 <link rel="stylesheet" href="style.css">
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
-
 <body>
 
 <header>
-<h1>☀ Especialista Solar PRO 12</h1>
-<p>CRM • Funil de Vendas • Kits automáticos • Propostas • PDF</p>
+<h1>☀ Especialista Solar PRO 12.2</h1>
+<p>CRM • Funil • Kits automáticos • Propostas • PDF • APP instalável</p>
 </header>
-<button id="installBtn" style="display:none" class="install-btn">
-📲 Instalar Aplicativo
-</button>
+
+<button id="installBtn" class="install-btn" style="display:none">📲 Instalar Aplicativo</button>
 
 <section class="card">
 <h2>Novo Lead</h2>
@@ -29,10 +25,7 @@
 <input id="telefone" placeholder="WhatsApp">
 <input id="consumo" type="number" placeholder="Consumo mensal kWh">
 <select id="status">
-<option>Lead</option>
-<option>Orçamento</option>
-<option>Fechado</option>
-<option>Instalado</option>
+<option>Lead</option><option>Orçamento</option><option>Fechado</option><option>Instalado</option>
 </select>
 <button onclick="addCliente()">Salvar</button>
 </section>
@@ -51,12 +44,10 @@
 <button onclick="gerarProposta()">Gerar Proposta PDF</button>
 </section>
 
-<section class="card">
-<h2>Dashboard</h2>
-<p id="resumo"></p>
-<canvas id="grafico"></canvas>
-</section>
-
 <script src="app.js"></script>
+<script>
+if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
+</script>
+
 </body>
 </html>

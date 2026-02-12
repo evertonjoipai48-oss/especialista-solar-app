@@ -1,23 +1,6 @@
 
-const CACHE = "solar-pro";
-
-self.addEventListener("install", e => {
-  e.waitUntil(
-    caches.open(CACHE).then(cache =>
-      cache.addAll([
-        "./",
-        "./index.html",
-        "./style.css",
-        "./app.js",
-        "./manifest.json",
-        "./favicon.ico"
-      ])
-    )
-  );
+const CACHE="solar-pro-122";
+self.addEventListener("install",e=>{
+e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["./","./index.html","./style.css","./app.js","./manifest.json","./favicon.ico"])));
 });
-
-self.addEventListener("fetch", e => {
-  e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
-  );
-});
+self.addEventListener("fetch",e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));});

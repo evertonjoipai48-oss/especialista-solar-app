@@ -4,13 +4,4 @@ header{text-align:center;margin-bottom:20px}
 .card{background:#fff;padding:20px;margin:15px auto;max-width:800px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
 input,select,button{width:100%;margin:6px 0;padding:10px}
 button{background:#ff9800;color:#fff;border:none;font-weight:bold}
-.install-btn{
-  background:#2ecc71;
-  color:white;
-  border:none;
-  padding:12px;
-  font-weight:bold;
-  border-radius:8px;
-  margin-bottom:15px;
-  cursor:pointer;
-}
+.install-btn{background:#2ecc71;font-size:16px;margin:10px auto;display:block}
