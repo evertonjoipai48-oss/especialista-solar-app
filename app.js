@@ -1,12 +1,14 @@
 
 // ======= COLE AQUI SUAS CHAVES FIREBASE =======
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_PROJETO.firebaseapp.com",
-  projectId: "SEU_PROJETO"
+  apiKey: "AIzaSyXXXXX",
+  authDomain: "especialista-solar.firebaseapp.com",
+  projectId: "especialista-solar",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
 };
 
-};
 // =============================================
 
 firebase.initializeApp(firebaseConfig);
