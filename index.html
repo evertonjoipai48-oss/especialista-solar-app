@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Especialista Solar PRO 11</title>
+<title>Especialista Solar PRO 12</title>
 
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="favicon.ico">
@@ -16,36 +16,43 @@
 <body>
 
 <header>
-<h1>☀ Especialista Solar PRO 11</h1>
-<p>Dashboard • Propostas • Economia • PDF • App instalável</p>
+<h1>☀ Especialista Solar PRO 12</h1>
+<p>CRM • Funil de Vendas • Kits automáticos • Propostas • PDF</p>
 </header>
 
-<div class="grid">
-
 <section class="card">
-<h2>Cliente</h2>
-<input id="cliente" placeholder="Nome do cliente">
+<h2>Novo Lead</h2>
+<input id="nome" placeholder="Nome cliente">
+<input id="telefone" placeholder="WhatsApp">
 <input id="consumo" type="number" placeholder="Consumo mensal kWh">
-<input id="conta" type="number" placeholder="Valor conta (R$)">
-<button onclick="salvarCliente()">Salvar Cliente</button>
-<select id="lista" onchange="carregar()"></select>
+<select id="status">
+<option>Lead</option>
+<option>Orçamento</option>
+<option>Fechado</option>
+<option>Instalado</option>
+</select>
+<button onclick="addCliente()">Salvar</button>
 </section>
 
 <section class="card">
-<h2>Proposta</h2>
-<input id="precoKit" type="number" placeholder="Valor do Kit (R$)">
+<h2>Clientes (CRM)</h2>
+<select id="lista" size="6" onchange="selecionar()"></select>
+<button onclick="mudarStatus()">Atualizar Status</button>
+<button onclick="excluir()">Excluir</button>
+</section>
+
+<section class="card">
+<h2>Kit automático</h2>
+<p id="kitInfo"></p>
 <input id="parcelas" type="number" placeholder="Parcelas">
 <button onclick="gerarProposta()">Gerar Proposta PDF</button>
 </section>
 
 <section class="card">
 <h2>Dashboard</h2>
-<p id="economia"></p>
-<p id="roi"></p>
+<p id="resumo"></p>
 <canvas id="grafico"></canvas>
 </section>
-
-</div>
 
 <script src="app.js"></script>
 </body>
