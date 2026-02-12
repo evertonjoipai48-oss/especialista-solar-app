@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
   <title>Especialista Solar PRO 8.0</title>
 
   <link rel="stylesheet" href="style.css"/>
@@ -10,7 +12,7 @@
   <!-- Chart -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- APP (APENAS 1 VEZ) -->
+  <!-- APP -->
   <script type="module" src="app.js"></script>
 </head>
 
@@ -21,11 +23,65 @@
   <p>Login • Nuvem • Painel Financeiro</p>
 </header>
 
+
+<!-- ================= LOGIN ================= -->
 <section id="loginBox" class="card">
   <h2>Login</h2>
+
   <input id="email" placeholder="Email">
   <input id="senha" type="password" placeholder="Senha">
+
   <button id="btnLogin">Entrar / Criar conta</button>
+</section>
+
+
+
+<!-- ================= APP / PAINEL ================= -->
+<section id="appBox" style="display:none">
+
+  <div class="card">
+    <button id="logout">Sair</button>
+  </div>
+
+
+  <!-- Cliente -->
+  <div class="card">
+    <h2>Cliente</h2>
+
+    <input id="clienteNome" placeholder="Nome do cliente">
+    <button id="addCliente">Adicionar</button>
+
+    <select id="clientesSelect"></select>
+  </div>
+
+
+  <!-- Dados -->
+  <div class="card">
+    <h2>Dados do mês</h2>
+
+    <input id="mes" placeholder="Mês">
+    <input id="producao" placeholder="Produção kWh">
+    <input id="tarifa" value="1.12">
+
+    <button id="salvarMes">Salvar</button>
+  </div>
+
+
+  <!-- Painel -->
+  <div class="card">
+    <h2>Painel Financeiro</h2>
+
+    <p id="totalReceita"></p>
+
+    <canvas id="grafico"></canvas>
+  </div>
+
+
+  <!-- Tabela -->
+  <div class="card">
+    <table id="tabela"></table>
+  </div>
+
 </section>
 
 </body>
