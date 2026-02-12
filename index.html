@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Especialista Solar PRO 7.0</title>
+  <title>Especialista Solar PRO 8.0</title>
 
   <link rel="stylesheet" href="style.css"/>
 
+  <!-- Chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- APP (APENAS 1 VEZ) -->
   <script type="module" src="app.js"></script>
-
-
-  <!-- Firebase -->
-<script type="module" src="app.js"></script>
-
 </head>
 
 <body>
 
 <header>
-  <h1>☀ Especialista Solar PRO 7.0</h1>
+  <h1>☀ Especialista Solar PRO 8.0</h1>
   <p>Login • Nuvem • Painel Financeiro</p>
 </header>
 
@@ -27,39 +26,6 @@
   <input id="email" placeholder="Email">
   <input id="senha" type="password" placeholder="Senha">
   <button id="btnLogin">Entrar / Criar conta</button>
-</section>
-
-<section id="appBox" style="display:none">
-
-  <div class="card">
-    <button id="logout">Sair</button>
-  </div>
-
-  <div class="card">
-    <h2>Cliente</h2>
-    <input id="clienteNome" placeholder="Nome do cliente">
-    <button id="addCliente">Adicionar</button>
-    <select id="clientesSelect"></select>
-  </div>
-
-  <div class="card">
-    <h2>Dados do mês</h2>
-    <input id="mes" placeholder="Mês">
-    <input id="producao" placeholder="Produção kWh">
-    <input id="tarifa" value="1.12">
-    <button id="salvar">Salvar</button>
-  </div>
-
-  <div class="card">
-    <h2>Painel Financeiro</h2>
-    <p id="totalReceita"></p>
-    <canvas id="graficoFinanceiro"></canvas>
-  </div>
-
-  <div class="card">
-    <table id="tabela"></table>
-  </div>
-
 </section>
 
 </body>
