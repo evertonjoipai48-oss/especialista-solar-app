@@ -5,6 +5,8 @@ const firebaseConfig = {
   authDomain: "SEU_PROJETO.firebaseapp.com",
   projectId: "SEU_PROJETO"
 };
+
+};
 // =============================================
 
 firebase.initializeApp(firebaseConfig);
