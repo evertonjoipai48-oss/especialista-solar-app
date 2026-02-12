@@ -1,7 +1,9 @@
 
+const CACHE = "solar-pro";
+
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("solar-app").then(cache =>
+    caches.open(CACHE).then(cache =>
       cache.addAll([
         "./",
         "./index.html",
