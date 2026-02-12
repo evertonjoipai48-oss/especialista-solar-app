@@ -1,88 +1,43 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Especialista Solar PRO 9.0</title>
 
-  <title>Especialista Solar PRO 8.0</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
 
-  <link rel="stylesheet" href="style.css"/>
-
-  <!-- Chart -->
+  <!-- Chart.js OFFLINE -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <!-- APP -->
-  <script type="module" src="app.js"></script>
 </head>
-
 <body>
 
-<header>
-  <h1>☀ Especialista Solar PRO 8.0</h1>
-  <p>Login • Nuvem • Painel Financeiro</p>
-</header>
+  <header>
+    <h1>☀ Especialista Solar PRO 9.0</h1>
+    <p>Monitoramento • Clientes • Produção • Relatórios</p>
+  </header>
 
-
-<!-- ================= LOGIN ================= -->
-<section id="loginBox" class="card">
-  <h2>Login</h2>
-
-  <input id="email" placeholder="Email">
-  <input id="senha" type="password" placeholder="Senha">
-
-  <button id="btnLogin">Entrar / Criar conta</button>
-</section>
-
-
-
-<!-- ================= APP / PAINEL ================= -->
-<section id="appBox" style="display:none">
-
-  <div class="card">
-    <button id="logout">Sair</button>
-  </div>
-
-
-  <!-- Cliente -->
-  <div class="card">
+  <section class="card">
     <h2>Cliente</h2>
-
     <input id="clienteNome" placeholder="Nome do cliente">
-    <button id="addCliente">Adicionar</button>
+    <button onclick="addCliente()">Adicionar</button>
+    <select id="clienteSelect"></select>
+  </section>
 
-    <select id="clientesSelect"></select>
-  </div>
-
-
-  <!-- Dados -->
-  <div class="card">
+  <section class="card">
     <h2>Dados do mês</h2>
+    <input id="mes" placeholder="Mês (Ex: Jan)">
+    <input id="kwh" type="number" placeholder="Produção kWh">
+    <button onclick="addRegistro()">Salvar</button>
+    <button onclick="exportarCSV()">Exportar Excel (CSV)</button>
+  </section>
 
-    <input id="mes" placeholder="Mês">
-    <input id="producao" placeholder="Produção kWh">
-    <input id="tarifa" value="1.12">
-
-    <button id="salvarMes">Salvar</button>
-  </div>
-
-
-  <!-- Painel -->
-  <div class="card">
-    <h2>Painel Financeiro</h2>
-
-    <p id="totalReceita"></p>
-
+  <section class="card">
     <canvas id="grafico"></canvas>
-  </div>
+  </section>
 
-
-  <!-- Tabela -->
-  <div class="card">
-    <table id="tabela"></table>
-  </div>
-
-</section>
-
+<script src="app.js"></script>
 </body>
 </html>

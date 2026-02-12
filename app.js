@@ -1,92 +1,75 @@
+let dados = JSON.parse(localStorage.getItem("solarDados") || "{}");
+let chart;
 
+function salvar(){
+  localStorage.setItem("solarDados", JSON.stringify(dados));
+}
 
-// 🔥 FIREBASE CDN
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+function addCliente(){
+  const nome = clienteNome.value.trim();
+  if(!nome) return;
+  if(!dados[nome]) dados[nome] = [];
+  clienteNome.value="";
+  atualizarClientes();
+  salvar();
+}
 
-import {
-  getFirestore,
-  doc,
-  setDoc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+function atualizarClientes(){
+  clienteSelect.innerHTML="";
+  Object.keys(dados).forEach(c=>{
+    let o=document.createElement("option");
+    o.textContent=c;
+    clienteSelect.appendChild(o);
+  });
+  atualizarGrafico();
+}
 
+function addRegistro(){
+  const c = clienteSelect.value;
+  if(!c) return;
+  const m = mes.value;
+  const k = Number(kwh.value);
 
-// ===============================
-// CONFIG (SÓ AQUI NO TOPO)
-// ===============================
-const firebaseConfig = {
-  apiKey: "AIzaSyCS9EtEe8ejzX3JecaXPGpzBdYE7mxzc3c",
-  authDomain: "especialista-solar.firebaseapp.com",
-  projectId: "especialista-solar",
-  storageBucket: "especialista-solar.firebasestorage.app",
-  messagingSenderId: "877584326662",
-  appId: "1:877584326662:web:09d38d85139957bb70a387"
-};
+  dados[c].push({mes:m,kwh:k});
+  salvar();
+  atualizarGrafico();
+}
 
+function atualizarGrafico(){
+  const c = clienteSelect.value;
+  if(!c) return;
 
-// ===============================
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-// ===============================
+  const labels = dados[c].map(x=>x.mes);
+  const valores = dados[c].map(x=>x.kwh);
 
+  const ctx = document.getElementById("grafico");
 
+  if(chart) chart.destroy();
 
-// ===== ELEMENTOS =====
-const email = document.getElementById("email");
-const senha = document.getElementById("senha");
-const btnLogin = document.getElementById("btnLogin");
-const logoutBtn = document.getElementById("logout");
-
-const loginBox = document.getElementById("loginBox");
-const appBox = document.getElementById("appBox");
-
-
-// ===============================
-// LOGIN
-// ===============================
-if(btnLogin){
-  btnLogin.onclick = async () => {
-    try{
-      await signInWithEmailAndPassword(auth,email.value,senha.value);
-    }catch{
-      await createUserWithEmailAndPassword(auth,email.value,senha.value);
+  chart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels:labels,
+      datasets:[{
+        label:'Produção kWh',
+        data:valores
+      }]
     }
-  };
+  });
 }
 
+function exportarCSV(){
+  const c = clienteSelect.value;
+  if(!c) return;
 
-// ===============================
-// LOGOUT
-// ===============================
-if(logoutBtn){
-  logoutBtn.onclick = () => signOut(auth);
+  let csv = "Mes,kWh\n";
+  dados[c].forEach(r=> csv+=`${r.mes},${r.kwh}\n`);
+
+  const blob = new Blob([csv]);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = c+".csv";
+  a.click();
 }
 
-
-// ===============================
-// REDIRECIONAMENTO AUTOMÁTICO
-// ===============================
-onAuthStateChanged(auth,(user)=>{
-
-  if(user){
-    console.log("Logado");
-
-    if(loginBox) loginBox.style.display="none";
-    if(appBox) appBox.style.display="block";
-
-  }else{
-    console.log("Deslogado");
-
-    if(loginBox) loginBox.style.display="block";
-    if(appBox) appBox.style.display="none";
-  }
-
-});
+atualizarClientes();
