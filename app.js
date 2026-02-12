@@ -1,122 +1,79 @@
 
-let dados = JSON.parse(localStorage.getItem("solarDados10") || "{}");
+let dados = JSON.parse(localStorage.getItem("solar11") || "{}");
 let chart;
 
-const SENHA_PADRAO = "1234";
-
-function login(){
-  if(senha.value === SENHA_PADRAO){
-    document.getElementById("app").style.display="block";
-    senha.parentElement.style.display="none";
-    atualizarClientes();
-  } else {
-    alert("Senha incorreta");
-  }
-}
-
 function salvar(){
-  localStorage.setItem("solarDados10", JSON.stringify(dados));
+ localStorage.setItem("solar11", JSON.stringify(dados));
 }
 
-function addCliente(){
-  const nome = clienteNome.value.trim();
-  if(!nome) return;
-
-  if(!dados[nome]) dados[nome] = [];
-
-  clienteNome.value="";
-  salvar();
-  atualizarClientes();
+function salvarCliente(){
+ const nome = cliente.value;
+ dados[nome] = {
+  consumo:Number(consumo.value),
+  conta:Number(conta.value)
+ };
+ salvar();
+ atualizarLista();
 }
 
-function atualizarClientes(){
-  clienteSelect.innerHTML="";
-  Object.keys(dados).forEach(c=>{
-    let o=document.createElement("option");
-    o.textContent=c;
-    clienteSelect.appendChild(o);
-  });
+function atualizarLista(){
+ lista.innerHTML="";
+ Object.keys(dados).forEach(c=>{
+  let o=document.createElement("option");
+  o.textContent=c;
+  lista.appendChild(o);
+ });
 }
 
-function addRegistro(){
-  const c = clienteSelect.value;
-  if(!c) return;
+function carregar(){
+ const c=lista.value;
+ const d=dados[c];
 
-  dados[c].push({
-    mes:mes.value,
-    kwh:Number(kwh.value),
-    valor:Number(valor.value)
-  });
+ const economiaMensal = d.conta * 0.9;
+ const economiaAno = economiaMensal * 12;
 
-  mes.value=""; kwh.value=""; valor.value="";
-
-  salvar();
-  atualizarGrafico();
+ economia.innerText = "Economia anual estimada: R$ "+economiaAno.toFixed(2);
 }
 
-function atualizarGrafico(){
-  const c = clienteSelect.value;
-  if(!c) return;
+function gerarProposta(){
+ const c=lista.value;
+ const d=dados[c];
+ const kit=Number(precoKit.value);
+ const parc=Number(parcelas.value);
 
-  const labels = dados[c].map(r=>r.mes);
-  const valores = dados[c].map(r=>r.kwh);
+ const economiaMensal = d.conta * 0.9;
+ const payback = kit / economiaMensal;
 
-  const ctx=document.getElementById("grafico");
+ roi.innerText = "Payback aproximado: "+payback.toFixed(1)+" meses";
 
-  if(chart) chart.destroy();
+ gerarGrafico(economiaMensal);
 
-  chart=new Chart(ctx,{
-    type:'line',
-    data:{
-      labels:labels,
-      datasets:[{
-        label:'Produção kWh',
-        data:valores
-      }]
-    }
-  });
+ const { jsPDF } = window.jspdf;
+ const doc = new jsPDF();
+
+ doc.text("PROPOSTA COMERCIAL - ESPECIALISTA SOLAR",20,20);
+ doc.text("Cliente: "+c,20,40);
+ doc.text("Consumo: "+d.consumo+" kWh",20,50);
+ doc.text("Conta atual: R$ "+d.conta,20,60);
+ doc.text("Kit: R$ "+kit,20,70);
+ doc.text("Parcelas: "+parc,20,80);
+ doc.text("Economia mensal: R$ "+economiaMensal.toFixed(2),20,90);
+ doc.text("Payback: "+payback.toFixed(1)+" meses",20,100);
+
+ doc.save(c+"_proposta.pdf");
 }
 
-function exportarCSV(){
-  const c=clienteSelect.value;
-  if(!c) return;
+function gerarGrafico(valor){
+ const ctx=document.getElementById("grafico");
+ if(chart) chart.destroy();
 
-  let csv="Mes,kWh,Valor(R$)\n";
-  dados[c].forEach(r=> csv+=`${r.mes},${r.kwh},${r.valor}\n`);
-
-  const blob=new Blob([csv]);
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download=c+".csv";
-  a.click();
-}
-
-function gerarPDF(){
-  const c=clienteSelect.value;
-  if(!c) return;
-
-  const { jsPDF } = window.jspdf;
-  const doc=new jsPDF();
-
-  doc.text("Relatório Solar - "+c,20,20);
-
-  let y=40;
-  dados[c].forEach(r=>{
-    doc.text(`${r.mes} - ${r.kwh} kWh - R$ ${r.valor}`,20,y);
-    y+=10;
-  });
-
-  doc.save(c+"_relatorio.pdf");
-}
-
-function limparDados(){
-  const c=clienteSelect.value;
-  if(!c) return;
-
-  if(confirm("Excluir cliente?")){
-    delete dados[c];
-    salvar();
-    atualizarClientes();
-    if(chart) chart.destroy();
+ chart=new Chart(ctx,{
+  type:'bar',
+  data:{
+   labels:['Economia Mensal'],
+   datasets:[{data:[valor]}]
   }
+ });
 }
+
+atualizarLista();
