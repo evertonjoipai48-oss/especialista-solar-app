@@ -1,1 +1,30 @@
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Painel Financeiro</title>
+  <meta charset="UTF-8">
+</head>
+<body style="font-family: Arial; text-align:center; padding:50px">
+
+  <h1>☀️ Especialista Solar PRO</h1>
+  <h2>Painel Financeiro</h2>
+
+  <p>Login realizado com sucesso ✅</p>
+
+  <button onclick="logout()">Sair</button>
+
+  <script type="module">
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+    const auth = getAuth();
+
+    window.logout = () => {
+      signOut(auth).then(()=>{
+        window.location.href = "index.html";
+      });
+    };
+  </script>
+
+</body>
+</html>
