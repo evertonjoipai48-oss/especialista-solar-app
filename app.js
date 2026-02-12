@@ -99,4 +99,9 @@ async function carregar(){
  }else{
   adminBox.style.display="none";
  }
+}const firebaseConfig = {
+  apiKey: "...",
+  authDomain: "...",
+  projectId: "..."
 }
+
