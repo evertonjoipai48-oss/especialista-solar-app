@@ -1,9 +1,9 @@
 {
-  "name": "Especialista Solar PRO 15 CLOUD",
-  "short_name": "SolarCloud",
-  "start_url": "./",
+  "name": "Especialista Solar PRO 16 SaaS",
+  "short_name": "Solar16",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#2ecc71",
+  "theme_color": "#0b4a6f",
   "icons": []
 }

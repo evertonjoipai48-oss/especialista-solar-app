@@ -2,39 +2,81 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Especialista Solar PRO 15 CLOUD</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Especialista Solar PRO 16 SaaS</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
   <script defer src="app.js"></script>
 </head>
+
 <body>
 
 <header class="top">
-  <div class="logo"></div>
-  <h1>Especialista Solar PRO 15 CLOUD</h1>
-  <p>CRM • Nuvem • Multi dispositivos • Tempo real</p>
+  <div class="logo">☀️</div>
+  <h1>Especialista Solar PRO 16 SaaS</h1>
+  <button id="installBtn" class="install">Instalar App</button>
 </header>
 
-<section class="card">
-  <h2>Novo Lead</h2>
-  <input id="nome" placeholder="Nome cliente"/>
-  <input id="telefone" placeholder="WhatsApp"/>
-  <input id="consumo" type="number" placeholder="Consumo kWh"/>
-  <select id="status">
-    <option>Lead</option>
-    <option>Proposta</option>
-    <option>Fechado</option>
-  </select>
-  <button onclick="addCliente()">Salvar na Nuvem ☁️</button>
+<!-- LOGIN -->
+<section id="loginBox" class="card center">
+  <h2>Login Vendedor</h2>
+  <input id="email" placeholder="Email">
+  <input id="senha" type="password" placeholder="Senha">
+  <button onclick="login()">Entrar</button>
 </section>
 
-<section class="card">
-  <h2>Clientes (tempo real)</h2>
-  <ul id="lista"></ul>
-</section>
+<!-- APP -->
+<section id="app" class="hidden">
 
-<button id="installBtn" class="install">📲 Instalar Aplicativo</button>
+  <div class="userbar">
+    <span id="userName"></span>
+    <button onclick="logout()">Sair</button>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Novo Lead</h3>
+      <input id="nome" placeholder="Cliente">
+      <input id="valor" type="number" placeholder="Valor venda R$">
+      <button onclick="salvarLead()">Salvar</button>
+    </div>
+
+    <div class="card">
+      <h3>Metas</h3>
+      <input id="metaValor" type="number" placeholder="Meta mensal R$">
+      <button onclick="salvarMeta()">Salvar Meta</button>
+      <p id="metaInfo"></p>
+    </div>
+
+    <div class="card">
+      <h3>Comissão</h3>
+      <input id="perc" type="number" placeholder="% comissão">
+      <button onclick="salvarComissao()">Salvar %</button>
+      <p id="comissaoInfo"></p>
+    </div>
+
+    <div class="card">
+      <h3>Dashboard</h3>
+      <p id="resumo"></p>
+    </div>
+
+  </div>
+
+  <!-- ADMIN -->
+  <div class="admin card" id="adminBox">
+    <h3>Painel Admin</h3>
+    <p>Total geral empresa:</p>
+    <p id="totalEmpresa"></p>
+  </div>
+
+</section>
 
 </body>
 </html>

@@ -1,57 +1,102 @@
-// ===== CONFIGURE AQUI SUA CONTA FIREBASE =====
+
+// ======= COLE AQUI SUAS CHAVES FIREBASE =======
 const firebaseConfig = {
-  apiKey: "COLE_SUA_API_KEY_AQUI",
+  apiKey: "SUA_API_KEY",
   authDomain: "SEU_PROJETO.firebaseapp.com",
   projectId: "SEU_PROJETO"
 };
+// =============================================
 
-// Carrega Firebase CDN
-const s1=document.createElement('script');
-s1.src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js";
-document.head.appendChild(s1);
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-const s2=document.createElement('script');
-s2.src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js";
-document.head.appendChild(s2);
+let user;
 
-s2.onload=()=>{
-
- firebase.initializeApp(firebaseConfig);
- const db=firebase.firestore();
-
- const lista=document.getElementById("lista");
-
- window.addCliente=()=>{
-  db.collection("clientes").add({
-    nome:nome.value,
-    telefone:telefone.value,
-    consumo:consumo.value,
-    status:status.value,
-    criado:Date.now()
-  });
- };
-
- db.collection("clientes").orderBy("criado","desc")
- .onSnapshot(snapshot=>{
-   lista.innerHTML="";
-   snapshot.forEach(doc=>{
-     const c=doc.data();
-     const li=document.createElement("li");
-     li.innerText=c.nome+" - "+c.status;
-     lista.appendChild(li);
-   });
- });
-
-};
-
-// PWA install
-let promptEvent;
+// PWA instalar
+let deferredPrompt;
 window.addEventListener("beforeinstallprompt",(e)=>{
- e.preventDefault();
- promptEvent=e;
- document.getElementById("installBtn").onclick=()=>promptEvent.prompt();
+  e.preventDefault();
+  deferredPrompt=e;
+  installBtn.style.display="block";
+});
+installBtn.onclick=()=>deferredPrompt.prompt();
+
+// LOGIN
+function login(){
+ auth.signInWithEmailAndPassword(email.value,senha.value)
+ .catch(()=>auth.createUserWithEmailAndPassword(email.value,senha.value));
+}
+
+function logout(){auth.signOut();}
+
+auth.onAuthStateChanged(async u=>{
+ if(!u) return;
+ user=u;
+ loginBox.classList.add("hidden");
+ app.classList.remove("hidden");
+ userName.innerText="👤 "+u.email;
+ carregar();
 });
 
-if("serviceWorker" in navigator){
- navigator.serviceWorker.register("sw.js");
+// SALVAR LEAD
+async function salvarLead(){
+ await db.collection("vendas").add({
+  vendedor:user.email,
+  nome:nome.value,
+  valor:Number(valor.value),
+  data:new Date()
+ });
+ nome.value="";
+ valor.value="";
+ carregar();
+}
+
+// META
+async function salvarMeta(){
+ await db.collection("config").doc(user.email).set({
+  meta:Number(metaValor.value)
+ });
+ carregar();
+}
+
+// COMISSÃO
+async function salvarComissao(){
+ await db.collection("config").doc(user.email).set({
+  perc:Number(perc.value)
+ },{merge:true});
+ carregar();
+}
+
+// DASHBOARD
+async function carregar(){
+
+ const vendas = await db.collection("vendas").where("vendedor","==",user.email).get();
+
+ let total=0;
+ vendas.forEach(v=> total+=v.data().valor);
+
+ const conf = await db.collection("config").doc(user.email).get();
+
+ const meta = conf.data()?.meta||0;
+ const perc = conf.data()?.perc||5;
+
+ const comissao = total*(perc/100);
+
+ resumo.innerText=
+  "Vendas: R$ "+total.toFixed(2)+" | Comissão: R$ "+comissao.toFixed(2);
+
+ metaInfo.innerText="Meta: R$ "+meta;
+ comissaoInfo.innerText="Comissão: "+perc+"%";
+
+ // ADMIN
+ if(user.email.includes("admin")){
+  adminBox.style.display="block";
+  const all = await db.collection("vendas").get();
+  let empresa=0;
+  all.forEach(v=>empresa+=v.data().valor);
+  totalEmpresa.innerText="R$ "+empresa.toFixed(2);
+ }else{
+  adminBox.style.display="none";
+ }
 }
