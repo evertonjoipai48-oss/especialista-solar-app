@@ -1,5 +1,13 @@
-// 🔥 FIREBASE 10 (CDN)
+
+// ================================
+// 🔥 ESPECIALISTA SOLAR PRO 8.0
+// Firebase + Login + Painel Cloud
+// ================================
+
+
+// ===== FIREBASE CDN =====
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -16,7 +24,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
-// ===== CONFIG DO SEU PROJETO =====
+// ===== CONFIG =====
 const firebaseConfig = {
   apiKey: "AIzaSyCS9EtEe8ejzX3JecaXPGpzBdYE7mxzc3c",
   authDomain: "especialista-solar.firebaseapp.com",
@@ -31,44 +39,54 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 
-// ===== LOGIN =====
+// ===================================
+// 🔐 LOGIN
+// ===================================
 const email = document.getElementById("email");
 const senha = document.getElementById("senha");
 const btnLogin = document.getElementById("btnLogin");
 const logout = document.getElementById("logout");
 
-if(btnLogin){
-  btnLogin.onclick = async ()=>{
-    try{
-      await signInWithEmailAndPassword(auth,email.value,senha.value);
-    }catch{
-      await createUserWithEmailAndPassword(auth,email.value,senha.value);
+if (btnLogin) {
+  btnLogin.onclick = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email.value, senha.value);
+    } catch {
+      await createUserWithEmailAndPassword(auth, email.value, senha.value);
     }
   };
 }
 
-if(logout){
-  logout.onclick = ()=>signOut(auth);
-}
+if (logout) logout.onclick = () => signOut(auth);
 
 
-// ===== REDIRECIONA =====
-onAuthStateChanged(auth,(user)=>{
-  if(user){
-    if(location.pathname.includes("index.html") || location.pathname.endsWith("/")){
-      window.location.href="painel.html";
+// ===================================
+// 🔄 REDIRECIONAMENTO AUTOMÁTICO
+// (funciona no GitHub Pages)
+// ===================================
+onAuthStateChanged(auth, (user) => {
+
+  const pagina = window.location.pathname;
+
+  if (user) {
+    if (!pagina.includes("painel.html")) {
+      window.location.replace("painel.html");
     }
-  }else{
-    if(location.pathname.includes("painel.html")){
-      window.location.href="index.html";
+  } else {
+    if (!pagina.includes("index.html")) {
+      window.location.replace("index.html");
     }
   }
+
 });
 
 
-// ===== PAINEL =====
-let dados = {};
+// ===================================
+// 📊 PAINEL
+// ===================================
 let usuario = null;
+let dados = {};
+let chart = null;
 
 const clienteNome = document.getElementById("clienteNome");
 const addCliente = document.getElementById("addCliente");
@@ -81,30 +99,38 @@ const tabela = document.getElementById("tabela");
 const totalReceita = document.getElementById("totalReceita");
 const grafico = document.getElementById("grafico");
 
-let chart=null;
 
+// carrega dados após login
+onAuthStateChanged(auth, async (user) => {
 
-onAuthStateChanged(auth, async(user)=>{
-  if(!user || !clientesSelect) return;
+  if (!user || !clientesSelect) return;
 
   usuario = user.uid;
 
-  const snap = await getDoc(doc(db,"usuarios",usuario));
-  dados = snap.exists()? snap.data():{};
+  const snap = await getDoc(doc(db, "usuarios", usuario));
+  dados = snap.exists() ? snap.data() : {};
+
   atualizarClientes();
+
 });
 
 
-async function salvarNuvem(){
-  await setDoc(doc(db,"usuarios",usuario),dados);
+// salvar nuvem
+async function salvarNuvem() {
+  await setDoc(doc(db, "usuarios", usuario), dados);
 }
 
 
 // adicionar cliente
-if(addCliente){
-  addCliente.onclick = ()=>{
-    if(!dados[clienteNome.value])
-      dados[clienteNome.value]=[];
+if (addCliente) {
+  addCliente.onclick = () => {
+
+    const nome = clienteNome.value.trim();
+    if (!nome) return;
+
+    if (!dados[nome]) dados[nome] = [];
+
+    clienteNome.value = "";
 
     atualizarClientes();
     salvarNuvem();
@@ -112,13 +138,14 @@ if(addCliente){
 }
 
 
-function atualizarClientes(){
-  if(!clientesSelect) return;
+// lista clientes
+function atualizarClientes() {
 
-  clientesSelect.innerHTML="";
-  Object.keys(dados).forEach(c=>{
-    const o=document.createElement("option");
-    o.text=c;
+  clientesSelect.innerHTML = "";
+
+  Object.keys(dados).forEach(c => {
+    const o = document.createElement("option");
+    o.text = c;
     clientesSelect.appendChild(o);
   });
 
@@ -127,14 +154,16 @@ function atualizarClientes(){
 
 
 // salvar mês
-if(salvarMes){
-  salvarMes.onclick = ()=>{
-    const c = clientesSelect.value;
+if (salvarMes) {
+  salvarMes.onclick = () => {
 
-    const receita=(producao.value*tarifa.value).toFixed(2);
+    const c = clientesSelect.value;
+    if (!c) return;
+
+    const receita = (producao.value * tarifa.value).toFixed(2);
 
     dados[c].push({
-      mes:mes.value,
+      mes: mes.value,
       receita
     });
 
@@ -144,31 +173,34 @@ if(salvarMes){
 }
 
 
-function atualizarPainel(){
-  if(!clientesSelect) return;
+// atualizar painel
+function atualizarPainel() {
 
-  const lista=dados[clientesSelect.value]||[];
+  const lista = dados[clientesSelect.value] || [];
 
-  let total=0;
-  let labels=[];
-  let valores=[];
+  let total = 0;
+  let labels = [];
+  let valores = [];
 
-  tabela.innerHTML="<tr><th>Mês</th><th>Receita</th></tr>";
+  tabela.innerHTML = "<tr><th>Mês</th><th>Receita</th></tr>";
 
-  lista.forEach(l=>{
-    tabela.innerHTML+=`<tr><td>${l.mes}</td><td>R$ ${l.receita}</td></tr>`;
-    total+=Number(l.receita);
+  lista.forEach(l => {
+    tabela.innerHTML += `<tr><td>${l.mes}</td><td>R$ ${l.receita}</td></tr>`;
+    total += Number(l.receita);
     labels.push(l.mes);
     valores.push(l.receita);
   });
 
-  totalReceita.innerText="Receita total: R$ "+total.toFixed(2);
+  totalReceita.innerText = "Receita total: R$ " + total.toFixed(2);
 
-  if(chart) chart.destroy();
+  if (chart) chart.destroy();
 
-  chart=new Chart(grafico,{
-    type:"line",
-    data:{labels,datasets:[{label:"Receita",data:valores}]}
+  chart = new Chart(grafico, {
+    type: "line",
+    data: {
+      labels,
+      datasets: [{ label: "Receita", data: valores }]
+    }
   });
 }
 
