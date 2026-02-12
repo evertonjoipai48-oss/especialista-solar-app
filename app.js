@@ -1,5 +1,21 @@
 
-const kits = [
+const kits = [let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+
+  const btn = document.getElementById('installBtn');
+  btn.style.display = "block";
+
+  btn.addEventListener('click', async () => {
+    btn.style.display = 'none';
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+  });
+});
+
  {kwh:350, preco:10350},
  {kwh:450, preco:12000},
  {kwh:550, preco:13000},
