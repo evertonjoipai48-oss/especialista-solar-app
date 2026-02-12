@@ -140,3 +140,14 @@ function atualizarPainel(){
 
 clientesSelect.onchange = atualizarPainel;
 
+// 🔥 Detecta login automático
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    console.log("Logado:", user.email);
+
+    // muda de tela
+    window.location.href = "painel.html";
+  }
+});
