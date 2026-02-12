@@ -1,5 +1,5 @@
 
-const CACHE="solar-pro-123";
+const CACHE="solar13";
 self.addEventListener("install",e=>{
 e.waitUntil(caches.open(CACHE).then(c=>c.addAll(["./","./index.html","./style.css","./app.js","./manifest.json","./logo.png"])));
 });

@@ -1,12 +1,10 @@
 
 {
-"name":"Especialista Solar PRO 12.3",
+"name":"Especialista Solar PRO 13",
 "short_name":"SolarPRO",
-"start_url":"./index.html",
 "display":"standalone",
-"background_color":"#ffffff",
+"start_url":"./index.html",
 "theme_color":"#ff9800",
-"icons":[
- {"src":"logo.png","sizes":"512x512","type":"image/png"}
-]
+"background_color":"#ffffff",
+"icons":[{"src":"logo.png","sizes":"512x512","type":"image/png"}]
 }

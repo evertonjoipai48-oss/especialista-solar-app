@@ -3,13 +3,12 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Especialista Solar PRO 12.3</title>
+<title>Especialista Solar PRO 13</title>
 
 <link rel="manifest" href="manifest.json">
-<link rel="icon" href="logo.png">
 <link rel="stylesheet" href="style.css">
+<link rel="icon" href="logo.png">
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 
@@ -18,17 +17,22 @@
 <header class="top">
   <img src="logo.png" class="logo">
   <div>
-    <h1>Especialista Solar PRO 12.3</h1>
-    <p>CRM • Funil • Propostas • PDF • APP instalável</p>
+    <h1>Especialista Solar PRO 13</h1>
+    <p>CRM • Comissão • Backup • Excel • PDF • APP</p>
   </div>
 </header>
 
-<button id="installBtn" class="install-btn">
-📲 Instalar Aplicativo
-</button>
+<button id="installBtn" class="install-btn">📲 Instalar App</button>
 
 <section class="card">
-<h2>Novo Lead</h2>
+<h2>Login vendedor</h2>
+<input id="vendedor" placeholder="Nome do vendedor">
+<button onclick="salvarVendedor()">Entrar</button>
+<p id="usuarioAtual"></p>
+</section>
+
+<section class="card">
+<h2>Novo Cliente</h2>
 <input id="nome" placeholder="Nome cliente">
 <input id="telefone" placeholder="WhatsApp">
 <input id="consumo" type="number" placeholder="Consumo mensal kWh">
@@ -39,9 +43,16 @@
 </section>
 
 <section class="card">
-<h2>Clientes (CRM)</h2>
+<h2>CRM</h2>
 <select id="lista" size="6" onchange="selecionar()"></select>
-<button onclick="gerarProposta()">Gerar Proposta PDF</button>
+<button onclick="gerarProposta()">PDF</button>
+<button onclick="exportarCSV()">Exportar Excel</button>
+<button onclick="backup()">Backup JSON</button>
+</section>
+
+<section class="card">
+<h2>Comissão</h2>
+<p id="resumo"></p>
 </section>
 
 <script src="app.js"></script>
