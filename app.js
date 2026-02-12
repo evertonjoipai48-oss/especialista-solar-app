@@ -1,13 +1,12 @@
 
 // ======= COLE AQUI SUAS CHAVES FIREBASE =======
 const firebaseConfig = {
-  apiKey: "AIzaSyXXXXX",
+  apiKey: "AIzaSyA1B2C3D4E5",
   authDomain: "especialista-solar.firebaseapp.com",
-  projectId: "especialista-solar",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
+  projectId: "especialista-solar"
 };
+
+
 
 // =============================================
 
