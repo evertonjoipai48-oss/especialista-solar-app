@@ -1,11 +1,28 @@
 
 
 // ======== CONFIGURE AQUI COM SEU FIREBASE ========
+
+};// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "COLOQUE_SUA_APIKEY",
-  authDomain: "SEU_DOMINIO.firebaseapp.com",
-  projectId: "SEU_PROJECT_ID",
+  apiKey: "AIzaSyCS9EtEe8ejzX3JecaXPGpzBdYE7mxzc3c",
+  authDomain: "especialista-solar.firebaseapp.com",
+  projectId: "especialista-solar",
+  storageBucket: "especialista-solar.firebasestorage.app",
+  messagingSenderId: "877584326662",
+  appId: "1:877584326662:web:09d38d85139957bb70a387",
+  measurementId: "G-FDPXWDYZWG"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 // ================================================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
