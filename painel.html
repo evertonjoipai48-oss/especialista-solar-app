@@ -1,30 +1,182 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-  <title>Painel Financeiro</title>
-  <meta charset="UTF-8">
+<meta charset="UTF-8" />
+<title>Painel PRO 8.0</title>
+<link rel="stylesheet" href="style.css" />
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+  font-family: Arial;
+  background:#f4f6f9;
+  margin:0;
+}
+
+.top{
+  background:#0b3d91;
+  color:#fff;
+  padding:15px 30px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  padding:25px;
+}
+
+.card{
+  background:white;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 12px rgba(0,0,0,.08);
+}
+
+button{
+  background:#ff9800;
+  border:none;
+  padding:10px 16px;
+  border-radius:8px;
+  color:white;
+  cursor:pointer;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+td,th{
+  padding:8px;
+  border-bottom:1px solid #eee;
+}
+</style>
 </head>
-<body style="font-family: Arial; text-align:center; padding:50px">
 
-  <h1>☀️ Especialista Solar PRO</h1>
-  <h2>Painel Financeiro</h2>
+<body>
 
-  <p>Login realizado com sucesso ✅</p>
-
+<div class="top">
+  <h2>☀️ Especialista Solar PRO 8.0</h2>
   <button onclick="logout()">Sair</button>
+</div>
 
-  <script type="module">
-    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+<div class="grid">
 
-    const auth = getAuth();
+  <div class="card">
+    <h3>💰 Faturamento</h3>
+    <h1 id="total">R$ 0</h1>
+  </div>
 
-    window.logout = () => {
-      signOut(auth).then(()=>{
-        window.location.href = "index.html";
-      });
-    };
-  </script>
+  <div class="card">
+    <h3>👥 Clientes</h3>
+    <h1 id="clientes">0</h1>
+  </div>
+
+  <div class="card">
+    <h3>📈 Vendas</h3>
+    <h1 id="vendas">0</h1>
+  </div>
+
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <h3>Nova venda</h3>
+    <input id="nome" placeholder="Cliente"><br><br>
+    <input id="valor" placeholder="Valor"><br><br>
+    <button onclick="salvar()">Salvar</button>
+  </div>
+
+  <div class="card">
+    <canvas id="grafico"></canvas>
+  </div>
+
+</div>
+
+<div class="grid">
+  <div class="card">
+    <h3>Lista de vendas</h3>
+    <table id="tabela"></table>
+  </div>
+</div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "SUA_API",
+  authDomain: "SEU_AUTH",
+  projectId: "especialista-solar",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth();
+
+window.logout = () =>{
+  signOut(auth).then(()=> location.href="index.html");
+}
+
+window.salvar = async () => {
+  const nome = document.getElementById("nome").value;
+  const valor = Number(document.getElementById("valor").value);
+
+  await addDoc(collection(db,"vendas"),{
+    nome,valor,mes:new Date().getMonth()
+  });
+
+  carregar();
+}
+
+async function carregar(){
+
+  const query = await getDocs(collection(db,"vendas"));
+
+  let total=0, clientes=0, vendas=0;
+  let meses=[0,0,0,0,0,0,0,0,0,0,0,0];
+
+  const tabela=document.getElementById("tabela");
+  tabela.innerHTML="<tr><th>Cliente</th><th>Valor</th></tr>";
+
+  query.forEach(doc=>{
+    const d=doc.data();
+
+    total+=d.valor;
+    clientes++;
+    vendas++;
+    meses[d.mes]+=d.valor;
+
+    tabela.innerHTML+=`<tr><td>${d.nome}</td><td>R$ ${d.valor}</td></tr>`;
+  });
+
+  totalEl.textContent="R$ "+total;
+  clientesEl.textContent=clientes;
+  vendasEl.textContent=vendas;
+
+  new Chart(document.getElementById("grafico"),{
+    type:"bar",
+    data:{
+      labels:["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],
+      datasets:[{data:meses}]
+    }
+  });
+}
+
+carregar();
+</script>
 
 </body>
 </html>
