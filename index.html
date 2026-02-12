@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Especialista Solar PRO 9.0</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Especialista Solar PRO 10.0</title>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="favicon.ico">
-  <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="favicon.ico">
+<link rel="stylesheet" href="style.css">
 
-  <!-- Chart.js OFFLINE -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
+
 <body>
 
-  <header>
-    <h1>☀ Especialista Solar PRO 9.0</h1>
-    <p>Monitoramento • Clientes • Produção • Relatórios</p>
-  </header>
+<header>
+  <h1>☀ Especialista Solar PRO 10.0</h1>
+  <p>Gestão • Monitoramento • Relatórios • Financeiro</p>
+</header>
 
-  <section class="card">
-    <h2>Cliente</h2>
-    <input id="clienteNome" placeholder="Nome do cliente">
-    <button onclick="addCliente()">Adicionar</button>
-    <select id="clienteSelect"></select>
-  </section>
+<section class="card">
+  <h2>Login</h2>
+  <input id="senha" type="password" placeholder="Senha (padrão: 1234)">
+  <button onclick="login()">Entrar</button>
+</section>
 
-  <section class="card">
-    <h2>Dados do mês</h2>
-    <input id="mes" placeholder="Mês (Ex: Jan)">
-    <input id="kwh" type="number" placeholder="Produção kWh">
-    <button onclick="addRegistro()">Salvar</button>
-    <button onclick="exportarCSV()">Exportar Excel (CSV)</button>
-  </section>
+<div id="app" style="display:none">
 
-  <section class="card">
-    <canvas id="grafico"></canvas>
-  </section>
+<section class="card">
+  <h2>Cliente</h2>
+  <input id="clienteNome" placeholder="Nome do cliente">
+  <button onclick="addCliente()">Adicionar</button>
+  <select id="clienteSelect" onchange="atualizarGrafico()"></select>
+</section>
+
+<section class="card">
+  <h2>Dados Mensais</h2>
+  <input id="mes" placeholder="Mês">
+  <input id="kwh" type="number" placeholder="Produção kWh">
+  <input id="valor" type="number" placeholder="Valor conta (R$)">
+  <button onclick="addRegistro()">Salvar</button>
+</section>
+
+<section class="card">
+  <canvas id="grafico"></canvas>
+</section>
+
+<section class="card actions">
+  <button onclick="exportarCSV()">Excel</button>
+  <button onclick="gerarPDF()">Relatório PDF</button>
+  <button onclick="limparDados()">Limpar Cliente</button>
+</section>
+
+</div>
 
 <script src="app.js"></script>
 </body>

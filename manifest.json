@@ -1,8 +1,9 @@
+
 {
-  "name":"Especialista Solar PRO",
-  "short_name":"Solar PRO",
-  "start_url":"./index.html",
-  "display":"standalone",
-  "background_color":"#ffffff",
-  "theme_color":"#ff9800"
+"name":"Especialista Solar PRO 10",
+"short_name":"SolarPRO",
+"start_url":"./index.html",
+"display":"standalone",
+"background_color":"#ffffff",
+"theme_color":"#ff9800"
 }
