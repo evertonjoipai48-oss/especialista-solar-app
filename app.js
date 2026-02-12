@@ -66,19 +66,15 @@ if (logout) logout.onclick = () => signOut(auth);
 // ===================================
 onAuthStateChanged(auth, (user) => {
 
-  const pagina = window.location.pathname;
+ const firebaseConfig = {
+  apiKey: "AIzaSyCS9EtEe8ejzX3JecaXPGpzBdYE7mxzc3c",
+  authDomain: "especialista-solar.firebaseapp.com",
+  projectId: "especialista-solar",
+  storageBucket: "especialista-solar.firebasestorage.app",
+  messagingSenderId: "877584326662",
+  appId: "1:877584326662:web:09d38d85139957bb70a387"
+};
 
-  if (user) {
-    if (!pagina.includes("painel.html")) {
-      window.location.replace("painel.html");
-    }
-  } else {
-    if (!pagina.includes("index.html")) {
-      window.location.replace("index.html");
-    }
-  }
-
-});
 
 
 // ===================================
