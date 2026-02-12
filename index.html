@@ -1,64 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Especialista Solar PRO 13</title>
-
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
-<link rel="icon" href="logo.png">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Especialista Solar PRO 15 CLOUD</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="app.js"></script>
 </head>
-
 <body>
 
 <header class="top">
-  <img src="logo.png" class="logo">
-  <div>
-    <h1>Especialista Solar PRO 13</h1>
-    <p>CRM • Comissão • Backup • Excel • PDF • APP</p>
-  </div>
+  <div class="logo"></div>
+  <h1>Especialista Solar PRO 15 CLOUD</h1>
+  <p>CRM • Nuvem • Multi dispositivos • Tempo real</p>
 </header>
 
-<button id="installBtn" class="install-btn">📲 Instalar App</button>
-
 <section class="card">
-<h2>Login vendedor</h2>
-<input id="vendedor" placeholder="Nome do vendedor">
-<button onclick="salvarVendedor()">Entrar</button>
-<p id="usuarioAtual"></p>
+  <h2>Novo Lead</h2>
+  <input id="nome" placeholder="Nome cliente"/>
+  <input id="telefone" placeholder="WhatsApp"/>
+  <input id="consumo" type="number" placeholder="Consumo kWh"/>
+  <select id="status">
+    <option>Lead</option>
+    <option>Proposta</option>
+    <option>Fechado</option>
+  </select>
+  <button onclick="addCliente()">Salvar na Nuvem ☁️</button>
 </section>
 
 <section class="card">
-<h2>Novo Cliente</h2>
-<input id="nome" placeholder="Nome cliente">
-<input id="telefone" placeholder="WhatsApp">
-<input id="consumo" type="number" placeholder="Consumo mensal kWh">
-<select id="status">
-<option>Lead</option><option>Orçamento</option><option>Fechado</option>
-</select>
-<button onclick="addCliente()">Salvar</button>
+  <h2>Clientes (tempo real)</h2>
+  <ul id="lista"></ul>
 </section>
 
-<section class="card">
-<h2>CRM</h2>
-<select id="lista" size="6" onchange="selecionar()"></select>
-<button onclick="gerarProposta()">PDF</button>
-<button onclick="exportarCSV()">Exportar Excel</button>
-<button onclick="backup()">Backup JSON</button>
-</section>
-
-<section class="card">
-<h2>Comissão</h2>
-<p id="resumo"></p>
-</section>
-
-<script src="app.js"></script>
-<script>
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js');}
-</script>
+<button id="installBtn" class="install">📲 Instalar Aplicativo</button>
 
 </body>
 </html>

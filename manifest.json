@@ -1,10 +1,9 @@
-
 {
-"name":"Especialista Solar PRO 13",
-"short_name":"SolarPRO",
-"display":"standalone",
-"start_url":"./index.html",
-"theme_color":"#ff9800",
-"background_color":"#ffffff",
-"icons":[{"src":"logo.png","sizes":"512x512","type":"image/png"}]
+  "name": "Especialista Solar PRO 15 CLOUD",
+  "short_name": "SolarCloud",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2ecc71",
+  "icons": []
 }

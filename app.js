@@ -1,94 +1,57 @@
-
-const kits=[
- {kwh:350,preco:10350},
- {kwh:450,preco:12000},
- {kwh:550,preco:13000},
- {kwh:600,preco:16990},
- {kwh:700,preco:18990}
-];
-
-let dados=JSON.parse(localStorage.getItem("solar13")||"[]");
-let vendedorNome=localStorage.getItem("vendedor")||"";
-let selecionado=null;
-
-function salvar(){localStorage.setItem("solar13",JSON.stringify(dados));}
-
-function salvarVendedor(){
- vendedorNome=vendedor.value;
- localStorage.setItem("vendedor",vendedorNome);
- usuarioAtual.innerText="Vendedor: "+vendedorNome;
- atualizarResumo();
-}
-
-function addCliente(){
- const kit=kits.find(k=>consumo.value<=k.kwh)||kits[kits.length-1];
- dados.push({
-  vendedor:vendedorNome,
-  nome:nome.value,
-  telefone:telefone.value,
-  consumo:Number(consumo.value),
-  kit:kit.preco,
-  status:status.value
- });
- salvar(); atualizarLista(); atualizarResumo();
-}
-
-function atualizarLista(){
- lista.innerHTML="";
- dados.forEach((c,i)=>{
-  let o=document.createElement("option");
-  o.textContent=c.nome+" | "+c.status+" | R$ "+c.kit;
-  o.value=i;
-  lista.appendChild(o);
- });
-}
-
-function selecionar(){selecionado=lista.value;}
-
-function gerarProposta(){
- const c=dados[selecionado];
- const {jsPDF}=window.jspdf;
- const doc=new jsPDF();
- doc.text("PROPOSTA SOLAR",20,20);
- doc.text("Cliente: "+c.nome,20,40);
- doc.text("Valor kit: R$ "+c.kit,20,50);
- doc.save(c.nome+".pdf");
-}
-
-function exportarCSV(){
- let csv="Nome,Telefone,Consumo,Status,Valor\n";
- dados.forEach(c=>{
-  csv+=`${c.nome},${c.telefone},${c.consumo},${c.status},${c.kit}\n`;
- });
- const blob=new Blob([csv]);
- const a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download="clientes.csv";
- a.click();
-}
-
-function backup(){
- const blob=new Blob([JSON.stringify(dados)]);
- const a=document.createElement("a");
- a.href=URL.createObjectURL(blob);
- a.download="backup.json";
- a.click();
-}
-
-function atualizarResumo(){
- const fechados=dados.filter(c=>c.status=="Fechado" && c.vendedor==vendedorNome);
- const total=fechados.reduce((s,c)=>s+c.kit,0);
- const comissao=total*0.05;
- resumo.innerText="Vendas fechadas: R$ "+total+" | Comissão (5%): R$ "+comissao.toFixed(2);
-}
-
-atualizarLista();
-if(vendedorNome) usuarioAtual.innerText="Vendedor: "+vendedorNome;
-
-let deferredPrompt;
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;});
-installBtn.onclick=async()=>{
- if(!deferredPrompt) return alert("Já instalado!");
- deferredPrompt.prompt();
- await deferredPrompt.userChoice;
+// ===== CONFIGURE AQUI SUA CONTA FIREBASE =====
+const firebaseConfig = {
+  apiKey: "COLE_SUA_API_KEY_AQUI",
+  authDomain: "SEU_PROJETO.firebaseapp.com",
+  projectId: "SEU_PROJETO"
 };
+
+// Carrega Firebase CDN
+const s1=document.createElement('script');
+s1.src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js";
+document.head.appendChild(s1);
+
+const s2=document.createElement('script');
+s2.src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js";
+document.head.appendChild(s2);
+
+s2.onload=()=>{
+
+ firebase.initializeApp(firebaseConfig);
+ const db=firebase.firestore();
+
+ const lista=document.getElementById("lista");
+
+ window.addCliente=()=>{
+  db.collection("clientes").add({
+    nome:nome.value,
+    telefone:telefone.value,
+    consumo:consumo.value,
+    status:status.value,
+    criado:Date.now()
+  });
+ };
+
+ db.collection("clientes").orderBy("criado","desc")
+ .onSnapshot(snapshot=>{
+   lista.innerHTML="";
+   snapshot.forEach(doc=>{
+     const c=doc.data();
+     const li=document.createElement("li");
+     li.innerText=c.nome+" - "+c.status;
+     lista.appendChild(li);
+   });
+ });
+
+};
+
+// PWA install
+let promptEvent;
+window.addEventListener("beforeinstallprompt",(e)=>{
+ e.preventDefault();
+ promptEvent=e;
+ document.getElementById("installBtn").onclick=()=>promptEvent.prompt();
+});
+
+if("serviceWorker" in navigator){
+ navigator.serviceWorker.register("sw.js");
+}

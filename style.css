@@ -1,19 +1,43 @@
-
-body{font-family:Arial;background:#eef3f9;margin:0;padding:20px}
-.top{display:flex;gap:15px;align-items:center;justify-content:center}
-.logo{width:55px}
-.card{background:#fff;padding:20px;margin:15px auto;max-width:800px;border-radius:12px;box-shadow:0 4px 10px rgba(0,0,0,.1)}
-input,select,button{width:100%;margin:6px 0;padding:10px}
-
-.install-btn{
- position:fixed;
- bottom:15px;
- right:15px;
- background:#2ecc71;
- color:#fff;
- font-weight:bold;
- border:none;
- border-radius:40px;
- padding:14px 20px;
- cursor:pointer;
+body{
+  font-family:Arial, sans-serif;
+  background:#eef2f5;
+  margin:0;
+}
+.top{
+  text-align:center;
+  padding:30px;
+}
+.logo{
+  width:26px;height:26px;
+  background:#f4a300;
+  border-radius:50%;
+  display:inline-block;
+  margin-right:10px;
+}
+.card{
+  background:white;
+  padding:20px;
+  margin:20px auto;
+  max-width:420px;
+  border-radius:14px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+button{
+  background:#2ecc71;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:8px;
+  font-weight:bold;
+}
+.install{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:18px;
+  font-size:18px;
 }
